@@ -2,24 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Brand;
 
 class CatalogController extends Controller
 {
     public function index()
     {
         $categories = Category::all();
-        $products = Product::with('category')->get();
+        $brands = Brand::all();
 
-        return view('catalog', compact('categories', 'products'));
-    }
+        $products = Product::with(['category','brand']);
 
-    public function category(Category $category)
-    {
-        $categories = Category::all();
-        $products = $category->products()->with('category')->get();
+        if (request('category')) {
+            $products->where('category_id', request('category'));
+        }
 
-        return view('catalog', compact('categories', 'products', 'category'));
+        if (request('brand')) {
+            $products->where('brand_id', request('brand'));
+        }
+
+        $products = $products->get();
+
+        return view('catalog', compact('products','categories','brands'));
     }
 }
