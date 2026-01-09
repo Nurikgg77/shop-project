@@ -8,12 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
-    public function handle(Request $request, Closure $next)
-    {
-        if (Auth::check() && Auth::user()->email === 'admin@admin.com') {
-            return $next($request);
-        }
-
-        abort(403, 'Unauthorized');
+    public function handle($request, Closure $next)
+{
+    if (!auth()->check() || !auth()->user()->is_admin) {
+        abort(403);
     }
+    return $next($request);
+}
 }

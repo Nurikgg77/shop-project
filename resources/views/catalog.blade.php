@@ -3,7 +3,42 @@
 <body class="bg-gray-50 antialiased">
 <div class="max-w-7xl mx-auto px-4 py-12">
 
-<h1 class="text-4xl font-extrabold text-gray-900 mb-8">Наш Каталог</h1>
+{{-- Верхняя панель --}}
+<div class="flex justify-between items-center mb-8">
+
+    <h1 class="text-4xl font-extrabold text-gray-900">
+        Наш Каталог
+    </h1>
+
+    {{-- Кнопки справа --}}
+    <div class="flex items-center gap-4">
+
+        {{-- Админка --}}
+        @auth
+            @if(auth()->user()->is_admin)
+                <a href="/admin"
+                   class="px-5 py-2 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition">
+                    Админка
+                </a>
+            @endif
+        @endauth
+
+        {{-- Вход / выход --}}
+        @auth
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="px-5 py-2 rounded-xl bg-gray-800 text-white">
+                    Выйти
+                </button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="px-5 py-2 rounded-xl bg-gray-800 text-white">
+                Войти
+            </a>
+        @endauth
+
+    </div>
+</div>
 
 {{-- Категории --}}
 <div class="mb-6">

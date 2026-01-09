@@ -16,3 +16,11 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('categories', 'products'));
     }
 }
+class AdminController extends Controller
+{
+    public function index()
+    {
+        return view('admin.dashboard');
+    }
+}
+
