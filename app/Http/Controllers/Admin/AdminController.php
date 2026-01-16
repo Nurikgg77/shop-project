@@ -1,26 +1,53 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+namespace App\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 
-class AdminController extends Controller
+
+
+class Product extends Model
+
+
+
+
 {
-    public function dashboard()
+    protected $fillable = [
+        'name',
+        'price',
+        'year',
+        'category_id',
+        'brand_id',
+        'image',
+    ];
+
+    public function category()
     {
-        $categories = Category::all();
-        $products = Product::with('category')->get();
-        return view('admin.dashboard', compact('categories', 'products'));
+        return $this->belongsTo(Category::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 }
+
 class AdminController extends Controller
 {
     public function index()
     {
         return view('admin.dashboard');
     }
+
+    public function store(Request $request)
+{
+    dd($request->all(), $request->file('image'));
 }
 
+
+}

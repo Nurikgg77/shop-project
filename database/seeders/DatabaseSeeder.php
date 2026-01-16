@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -68,11 +67,7 @@ class DatabaseSeeder extends Seeder
             'price' => 1100,
         ]);
 
-        // ===== Admin User =====
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@admin.com',
-            'password' => Hash::make('Admin'),
-        ]);
+        // ===== Admin =====
+        $this->call(AdminSeeder::class);
     }
 }

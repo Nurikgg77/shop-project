@@ -2,29 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Product;
 
 class CatalogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Все категории и бренды
         $categories = Category::all();
         $brands = Brand::all();
 
-        $products = Product::with(['category','brand']);
+        // Базовый запрос товаров с подгрузкой категории и бренда
+        $query = Product::with(['category', 'brand']);
 
-        if (request('category')) {
-            $products->where('category_id', request('category'));
+        // Фильтр по категории
+        if ($request->has('category') && $request->category) {
+            $query->where('category_id', $request->category);
         }
 
-        if (request('brand')) {
-            $products->where('brand_id', request('brand'));
+        // Фильтр по бренду
+        if ($request->has('brand') && $request->brand) {
+            $query->where('brand_id', $request->brand);
         }
 
-        $products = $products->get();
+        // Получаем товары
+        $products = $query->get();
 
-        return view('catalog', compact('products','categories','brands'));
+        // Передаем данные в Blade
+        return view('catalog', compact('categories', 'brands', 'products'));
     }
 }
